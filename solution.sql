@@ -1,21 +1,56 @@
--- Lab Program 13
--- Normalize the Student table up to Third Normal Form (3NF).
---
--- Write your solution below.
---
--- Functional Dependencies:
--- StudentID -> StudentName, CourseName
--- CourseName -> FacultyName
--- FacultyName -> DepartmentName
---
--- Requirements:
--- 1. Create normalized tables.
--- 2. Define primary keys.
--- 3. Define foreign keys.
--- 4. Insert sample data.
---
--- Do not modify test.sh or .github/workflows/autograding.yml.
+CREATE DATABASE CollegeDB;
 
 USE CollegeDB;
 
--- Write your 3NF solution here.
+CREATE TABLE Course (
+    CourseID INT PRIMARY KEY,
+    CourseName VARCHAR(100) NOT NULL,
+    FacultyName VARCHAR(100) NOT NULL,
+    DepartmentName VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Student (
+    StudentID INT PRIMARY KEY,
+    StudentName VARCHAR(100) NOT NULL,
+    CourseID INT,
+    
+    CONSTRAINT FK_Student_Course
+        FOREIGN KEY (CourseID)
+        REFERENCES Course(CourseID)
+);
+
+
+INSERT INTO Course
+    (CourseID, CourseName, FacultyName, DepartmentName)
+VALUES
+    (101, 'Computer Science', 'Dr. Kumar', 'Computer Science'),
+    (102, 'Information Technology', 'Dr. Ravi', 'Information Technology'),
+    (103, 'Commerce', 'Dr. Priya', 'Commerce');
+
+
+INSERT INTO Student
+    (StudentID, StudentName, CourseID)
+VALUES
+    (1, 'Arun', 101),
+    (2, 'Bala', 102),
+    (3, 'Chitra', 101),
+    (4, 'Divya', 103),
+    (5, 'Karthik', 102);
+
+SELECT * FROM Student;
+
+
+
+SELECT * FROM Course;
+
+
+
+SELECT
+    Student.StudentID,
+    Student.StudentName,
+    Course.CourseName,
+    Course.FacultyName,
+    Course.DepartmentName
+FROM Student
+JOIN Course
+    ON Student.CourseID = Course.CourseID; 
